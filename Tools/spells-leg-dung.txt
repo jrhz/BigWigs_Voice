@@ -419,7 +419,7 @@ destructor_tentacle	Destructor Tentacle
 227592	Frostbite
 227615	Inferno Bolt
 227628	Piercing Missiles
-228334	Guradian's Image
+228334	Guardian's Image
 228269y	Flame Wreath on you. I will not move when Flame Wreath is cast or the raid blows up.
 227779	Ceaseless Winter
 
