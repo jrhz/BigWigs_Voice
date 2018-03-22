@@ -24,14 +24,13 @@ def main():
                     print spell_file + " exists; skipping"
                 else:
                     spell_text = spell_name + "."
-                    output_file = sounds_dir + spell_id + ".ogg"
                     response = polly.synthesize_speech(Text=spell_text,
                                                        OutputFormat="ogg_vorbis",
                                                        VoiceId=voice_type)
                     if "AudioStream" in response:
                         with closing(response["AudioStream"]) as stream:
                             data = stream.read()
-                            fo = open(output_file, "w+")
+                            fo = open(spell_file, "w+")
                             fo.write(data)
                             fo.close()
 
