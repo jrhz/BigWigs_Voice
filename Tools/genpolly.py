@@ -7,16 +7,26 @@ import re
 import argparse
 import boto3
 
+def getvoices(polly):
+    """Use describe voices to get a list of English voices to use"""
+    voices = []
+    voices_avail = polly.describe_voices(LanguageCode='en-US')
+    for voice in voices_avail['Voices']:
+        voices.append(voice['Name'])
+    return voices
+
 def main():
     """By default build with just the Joanna voice"""
-    # Valid list of voices. Could be generated dynamically from DescribeVoices
-    voice_ids = ('Joanna', 'Salli', 'Kimberly', 'Kendra', 'Ivy', 'Matthew', 'Joey', 'Justin')
+    polly = boto3.client("polly")
+
+    voice_ids = getvoices(polly)
+
     # Setup argument parser
     parser = argparse.ArgumentParser(description='Generate AWS Polly Voices for BigWigs_Voice')
     parser.add_argument("--voice", help="AWS Polly VoiceId", action="store",
                         choices=voice_ids, default='Joanna', dest='voice_type')
     args = parser.parse_args()
-    polly = boto3.client("polly")
+
     spell_lists = ('Tools/spells-leg-raid.txt', 'Tools/spells-leg-dung.txt',
                    'Tools/spells-wod-raid.txt')
     sounds_dir = "Sounds_" + args.voice_type + "/"
