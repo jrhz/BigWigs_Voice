@@ -17,10 +17,15 @@ def getvoices(polly):
 
 def main():
     """By default build with just the Joanna voice"""
+<<<<<<< HEAD
     polly = boto3.client("polly")
 
     voice_ids = getvoices(polly)
 
+=======
+    # Valid list of voices. Could be generated dynamically from DescribeVoices
+    voice_ids = ('Joanna', 'Salli', 'Kimberly', 'Kendra', 'Ivy', 'Matthew', 'Joey', 'Justin')
+>>>>>>> 2bac3354648b7b09b6a830f8c58137c3578d1923
     # Setup argument parser
     parser = argparse.ArgumentParser(description='Generate AWS Polly Voices for BigWigs_Voice')
     parser.add_argument("--voice", help="AWS Polly VoiceId", action="store",
