@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+"""Create AWS Polly based voices for BigWigs_Voice"""
 
 from contextlib import closing
 import os
@@ -7,6 +8,7 @@ import argparse
 import boto3
 
 def main():
+    """By default build with just the Joanna voice"""
     # Valid list of voices. Could be generated dynamically from DescribeVoices
     voice_ids = ('Joanna', 'Salli', 'Kimberly', 'Kendra', 'Ivy', 'Matthew', 'Joey', 'Justin')
     # Setup argument parser
@@ -23,28 +25,30 @@ def main():
         os.makedirs(sounds_dir)
 
     for spells_file in spell_lists:
-        for spell in filter(None, open(spells_file, "r").read().splitlines()):
-            if not spell.startswith(';'):
-                spell_id = spell.split('\t')[0]
-                spell_name = spell.split('\t')[1]
-                spell_file = sounds_dir + spell_id + ".ogg"
-                if "=" in spell_name:
-                    spell_name = re.sub(r'(\S+)=(\S+)\b', r'<phoneme alphabet="ipa" ph="\2">\1</phoneme>', spell_name)
-                spell_name = "<speak>" + spell_name + ".</speak>"
-                if not os.path.isfile(spell_file):
-                    response = polly.synthesize_speech(TextType='ssml',
-                                                       Text=spell_name,
-                                                       OutputFormat="ogg_vorbis",
-                                                       VoiceId=args.voice_type)
-                    if "AudioStream" in response:
-                        with closing(response["AudioStream"]) as stream:
-                            data = stream.read()
-                            file_out = open(spell_file, "w+")
-                            file_out.write(data)
-                            file_out.close()
-                    else:
-                        print "Warning: No AudioStream output for " + spell_name
+        with open(spells_file, "r") as s_file:
+            for spell_line in s_file:
+                spell_line = spell_line.rstrip('\n')
+                if not spell_line.startswith(';') and len(spell_line):
+                    spell_file = sounds_dir + spell_line.split('\t')[0] + ".ogg"
+                    spell_name = spell_line.split('\t')[1]
+                    if "=" in spell_name:
+                        spell_name = re.sub(r'(\S+)=(\S+)\b',
+                                            r'<phoneme alphabet="ipa" ph="\2">\1</phoneme>',
+                                            spell_name)
+                        spell_name = "<speak>" + spell_name + ".</speak>"
+                        if not os.path.isfile(spell_file):
+                            response = polly.synthesize_speech(TextType='ssml',
+                                                               Text=spell_name,
+                                                               OutputFormat="ogg_vorbis",
+                                                               VoiceId=args.voice_type)
+                            if "AudioStream" in response:
+                                with closing(response["AudioStream"]) as stream:
+                                    data = stream.read()
+                                    file_out = open(spell_file, "w+")
+                                    file_out.write(data)
+                                    file_out.close()
+                            else:
+                                print "Warning: No AudioStream output for " + spell_name
 
 if __name__ == "__main__":
     main()
-
