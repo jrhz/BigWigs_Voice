@@ -540,7 +540,7 @@ nightorb	Summon Nightorb
 shadowsoul	Shadowsoul
 238999	Darkness of a Thousand Souls
 -15543	Demonic Obelisk
-239130	Tear Rift
+239130	Tear=tɪɚ Rift
 239253	Flaming Orb
 240262	Burning
 237590y	Shadow Reflection: Hopeless
@@ -602,7 +602,7 @@ cannon_ability	Cannon Assault
 244737y	Shock Grenade on you
 
 ; Boss: Portal Keeper Hasabel
-244016	Reality Tear
+244016	Reality Tear=tɪɚ
 243983	Collapsing World
 244000	Felstorm Barrage
 244689	Transport Portal
